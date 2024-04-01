@@ -29,54 +29,57 @@
 #define FORCE_VERSION_H_INCLUDE
 #include "ap_version.h"
 
-extern const AP_HAL::HAL& hal;
+extern const AP_HAL::HAL &hal;
 
 using namespace SITL;
 
-
 AIS::AIS() : SerialDevice::SerialDevice()
 {
-    char* file_path;
-    IGNORE_RETURN(asprintf(&file_path, AP_BUILD_ROOT "/libraries/SITL/SIM_AIS_data.txt"));
+    // char *file_path;
+    // IGNORE_RETURN(asprintf(&file_path, AP_BUILD_ROOT "/libraries/SITL/SIM_AIS_data.txt"));
 
-    file = fopen(file_path,"r");
+    // file = fopen(file_path, "r");
 
-    if (file == nullptr) {
-        AP_HAL::panic("AIS could not open data file");
-    }
+    // if (file == nullptr)
+    // {
+    //     AP_HAL::panic("AIS could not open data file");
+    // }
 
     // seek past the header line
-    char line[100];
-    IGNORE_RETURN(fgets(line, sizeof(line), file));
+    // char line[100];
+    // IGNORE_RETURN(fgets(line, sizeof(line), file));
 }
 
 void AIS::update()
 {
-    if (file == nullptr) {
+    if (file == nullptr)
+    {
         AP_HAL::panic("AIS lost data file");
     }
 
     // just send a line of data at 1Hz:
     const uint32_t now = AP_HAL::millis();
-    if (now - last_sent_ms < 1000) {
+    if (now - last_sent_ms < 1000)
+    {
         return;
     }
     last_sent_ms = now;
 
     char line[100];
 
-    if (!fgets(line, sizeof(line), file)) {
+    if (!fgets(line, sizeof(line), file))
+    {
         // got to the end of the file, circle back
-        fseek(file,0,SEEK_SET);
-        if (!fgets(line, sizeof(line), file)) {
+        fseek(file, 0, SEEK_SET);
+        if (!fgets(line, sizeof(line), file))
+        {
             AP_HAL::panic("AIS lost data file");
         }
         return;
     }
 
-    //hal.console->printf("%s",line);
+    // hal.console->printf("%s",line);
     write_to_autopilot(line, strlen(line));
-
 }
 
-#endif  // HAL_SIM_AIS_ENABLED
+#endif // HAL_SIM_AIS_ENABLED
