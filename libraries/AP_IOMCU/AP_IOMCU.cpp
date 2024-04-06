@@ -154,7 +154,7 @@ void AP_IOMCU::thread_main(void)
             is_chibios_backend = (config.protocol_version == IOMCU_PROTOCOL_VERSION &&
                                   config.protocol_version2 == IOMCU_PROTOCOL_VERSION2);
 
-            DEV_PRINTF("IOMCU: 0x%lx\n", config.mcuid);
+            DEV_PRINTF("IOMCU: 0x%x\n", config.mcuid);
 
             // set IO_ARM_OK and FMU_ARMED
             if (!modify_register(PAGE_SETUP, PAGE_REG_SETUP_ARMING, 0,

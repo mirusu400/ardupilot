@@ -28,6 +28,8 @@ public:
     int32_t write(int fd, const void *buf, uint32_t count) override;
     int fsync(int fd) override;
     int32_t lseek(int fd, int32_t offset, int whence) override;
+    off_t lseek(int fileno, off_t position, int whence);
+    
     int stat(const char *pathname, struct stat *stbuf) override;
     int unlink(const char *pathname) override;
     int mkdir(const char *pathname) override;

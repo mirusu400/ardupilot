@@ -153,19 +153,12 @@ ifneq ($(strip $(TSRC)),)
     LDFLAGS  += -mthumb-interwork
   else
     # Pure THUMB mode, THUMB C code cannot be called by ARM asm code directly.
-    CFLAGS   += -mno-thumb-interwork -DTHUMB_NO_INTERWORKING
-    CPPFLAGS += -mno-thumb-interwork -DTHUMB_NO_INTERWORKING
-    ASFLAGS  += -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb
-    ASXFLAGS += -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb
-    LDFLAGS  += -mno-thumb-interwork -mthumb
+    CFLAGS   += -DTHUMB_NO_INTERWORKING
+    CPPFLAGS += -DTHUMB_NO_INTERWORKING
+    ASFLAGS  += -DTHUMB_NO_INTERWORKING -mthumb
+    ASXFLAGS += -DTHUMB_NO_INTERWORKING -mthumb
+    LDFLAGS  += -mthumb
   endif
-else
-  # Pure ARM mode
-  CFLAGS   += -mno-thumb-interwork
-  CPPFLAGS += -mno-thumb-interwork
-  ASFLAGS  += -mno-thumb-interwork
-  ASXFLAGS += -mno-thumb-interwork
-  LDFLAGS  += -mno-thumb-interwork
 endif
 
 # Generate dependency information

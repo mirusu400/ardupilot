@@ -1063,6 +1063,7 @@ class chibios(Board):
             'HAL_MAX_STACK_FRAME_SIZE=%d' % 1300
         )  # set per Wframe-larger-than, ensure its same
         env.CFLAGS += cfg.env.CPU_FLAGS + [
+            '-std=c++11',
             '-Wlogical-op',
             '-Wframe-larger-than=1300',
             '-Wno-attributes',
@@ -1092,13 +1093,27 @@ class chibios(Board):
             '-fno-builtin-vprintf',
             '-fno-builtin-vfprintf',
             '-fno-builtin-puts',
-            '-mno-thumb-interwork',
-            '-mthumb',
+            '-Wunused-command-line-argument',
+            # '-mno-thumb-interwork',
+            # '-mthumb',
+            '--target=arm-none-eabi',
+            # '-L/clang16-arm/lib/clang-runtimes/arm-none-eabi/armv7m_soft_nofp/lib',
+            # '-I/clang16-arm/lib/clang-runtimes/arm-none-eabi/armv7m_soft_nofp/include/',
+            # '-I/clang16-arm/lib/clang-runtimes/arm-none-eabi/armv7m_soft_nofp/include/c++/v1/',
+            "-L/opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/lib",
+            '-I/opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/',
+            '-I/opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/c++/10.2.1/',
+            '-I/opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/c++/10.2.1/arm-none-eabi/',
+            # "-D__STDCPP_WANT_MATH_SPEC_FUNCS__=1",
+            # "-DALLOW_DOUBLE_MATH_FUNCTIONS=1",
+            # '-I/usr/arm-linux-gnueabi/include/c++/11/',
+            '-mcpu=cortex-m4',
             '--specs=nano.specs',
             '--specs=nosys.specs',
             '-D__USE_CMSIS',
             '-Werror=deprecated-declarations',
             '-DNDEBUG=1',
+            # '-Wno-undef',
         ]
         if not cfg.options.Werror:
             env.CFLAGS += [
@@ -1134,7 +1149,7 @@ class chibios(Board):
             '-uchThdExit',
             '-fno-common',
             '-nostartfiles',
-            '-mno-thumb-interwork',
+            # '-mno-thumb-interwork',
             '-mthumb',
             '--specs=nano.specs',
             '--specs=nosys.specs',
