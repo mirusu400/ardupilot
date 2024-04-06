@@ -41,6 +41,7 @@
 #pragma once
 
 #include "AP_HAL_ChibiOS.h"
+
 # if defined(STM32H7XX) || defined(STM32G4)
 #include "CANFDIface.h"
 # else
@@ -236,7 +237,7 @@ public:
     void pollErrorFlagsFromISR(void);
 
     // CAN Peripheral register structure
-    static constexpr bxcan::CanType* const Can[HAL_NUM_CAN_IFACES] = { HAL_CAN_BASE_LIST };
+    static bxcan::CanType* Can[HAL_NUM_CAN_IFACES];
 
 protected:
     bool add_to_rx_queue(const CanRxItem &rx_item) override {

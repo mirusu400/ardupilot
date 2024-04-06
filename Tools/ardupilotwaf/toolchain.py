@@ -23,6 +23,7 @@ import os
 import re
 import sys
 
+
 @conf
 def find_gxx(conf):
     names = ['g++', 'c++']
@@ -32,6 +33,7 @@ def find_gxx(conf):
     conf.get_cc_version(cxx, gcc=True)
     conf.env.CXX_NAME = 'gcc'
 
+
 @conf
 def find_gcc(conf):
     names = ['gcc', 'cc']
@@ -40,6 +42,7 @@ def find_gcc(conf):
     cc = conf.find_program(names, var='CC')
     conf.get_cc_version(cc, gcc=True)
     conf.env.CC_NAME = 'gcc'
+
 
 def _clang_cross_support(cfg):
     if _clang_cross_support.called:
@@ -73,18 +76,21 @@ def _clang_cross_support(cfg):
         [cfg.env.CROSS_GCC[0], '--print-sysroot'],
         quiet=Context.BOTH,
     ).strip()
-
     cfg.env.CLANG_FLAGS = [
         '--target=' + cfg.env.TOOLCHAIN,
+        '--gcc-install-dir=' + toolchain_path,
         '--gcc-toolchain=' + toolchain_path,
         '--sysroot=' + sysroot,
-        '-B' + os.path.join(toolchain_path, 'bin')
+        '-B' + os.path.join(toolchain_path, 'bin'),
     ]
+
 
 _clang_cross_support.called = False
 
+
 def _set_clang_crosscompilation_wrapper(tool_module):
     original_configure = tool_module.configure
+
     def new_configure(cfg):
         if cfg.env.TOOLCHAIN == 'native':
             original_configure(cfg)
@@ -99,20 +105,25 @@ def _set_clang_crosscompilation_wrapper(tool_module):
             raise
         else:
             cfg.env.commit()
+
     tool_module.configure = new_configure
+
 
 _set_clang_crosscompilation_wrapper(clang)
 _set_clang_crosscompilation_wrapper(clangxx)
+
 
 def _filter_supported_c_compilers(*compilers):
     for k in compiler_c.c_compiler:
         l = compiler_c.c_compiler[k]
         compiler_c.c_compiler[k] = [c for c in compilers if c in l]
 
+
 def _filter_supported_cxx_compilers(*compilers):
     for k in compiler_cxx.cxx_compiler:
         l = compiler_cxx.cxx_compiler[k]
         compiler_cxx.cxx_compiler[k] = [c for c in compilers if c in l]
+
 
 def _set_pkgconfig_crosscompilation_wrapper(cfg):
     original_validatecfg = cfg.validate_cfg
@@ -127,6 +138,7 @@ def _set_pkgconfig_crosscompilation_wrapper(cfg):
         original_validatecfg(kw)
 
     cfg.validate_cfg = new_validate_cfg
+
 
 def configure(cfg):
     _filter_supported_c_compilers('gcc', 'clang')

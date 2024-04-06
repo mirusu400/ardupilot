@@ -50,7 +50,7 @@
 #define FORCE_VERSION_H_INCLUDE
 #include "ap_version.h"
 
-extern HAL_SITL& hal;
+extern HAL_SITL &hal;
 
 using namespace HALSITL;
 using namespace SITL;
@@ -122,67 +122,67 @@ void SITL_State::_usage(void)
            "\t--irlock-port PORT       set port num for irlock\n"
            "\t--start-time TIMESTR     set simulation start time in UNIX timestamp\n"
            "\t--sysid ID               set SYSID_THISMAV\n"
-           "\t--slave number           set the number of JSON slaves\n"
-        );
+           "\t--slave number           set the number of JSON slaves\n");
 }
 
-static const struct {
+static const struct
+{
     const char *name;
     Aircraft *(*constructor)(const char *frame_str);
 } model_constructors[] = {
-    { "quadplane",          QuadPlane::create },
-    { "xplane",             XPlane::create },
-    { "firefly",            QuadPlane::create },
-    { "+",                  MultiCopter::create },
-    { "quad",               MultiCopter::create },
-    { "copter",             MultiCopter::create },
-    { "x",                  MultiCopter::create },
-    { "bfxrev",             MultiCopter::create },
-    { "bfx",                MultiCopter::create },
-    { "djix",               MultiCopter::create },
-    { "cwx",                MultiCopter::create },
-    { "hexa",               MultiCopter::create },
-    { "hexa-cwx",           MultiCopter::create },
-    { "hexa-dji",           MultiCopter::create },
-    { "octa",               MultiCopter::create },
-    { "octa-cwx",           MultiCopter::create },
-    { "octa-dji",           MultiCopter::create },
-    { "octa-quad-cwx",      MultiCopter::create },
-    { "dodeca-hexa",        MultiCopter::create },
-    { "tri",                MultiCopter::create },
-    { "y6",                 MultiCopter::create },
-    { "deca",               MultiCopter::create },
-    { "deca-cwx",           MultiCopter::create },
-    { "heli",               Helicopter::create },
-    { "heli-dual",          Helicopter::create },
-    { "heli-compound",      Helicopter::create },
-    { "heli-blade360",         Helicopter::create },
-    { "singlecopter",       SingleCopter::create },
-    { "coaxcopter",         SingleCopter::create },
-    { "rover",              SimRover::create },
-    { "balancebot",         BalanceBot::create },
-    { "sailboat",           Sailboat::create },
-    { "motorboat",          MotorBoat::create },
-    { "crrcsim",            CRRCSim::create },
-    { "jsbsim",             JSBSim::create },
-    { "flightaxis",         FlightAxis::create },
-    { "gazebo",             Gazebo::create },
-    { "last_letter",        last_letter::create },
-    { "tracker",            Tracker::create },
-    { "balloon",            Balloon::create },
-    { "plane",              Plane::create },
-    { "calibration",        Calibration::create },
-    { "vectored",           Submarine::create },
-    { "vectored_6dof",      Submarine::create },
-    { "silentwings",        SilentWings::create },
-    { "morse",              Morse::create },
-    { "airsim",             AirSim::create},
-    { "scrimmage",          Scrimmage::create },
-    { "webots-python",      WebotsPython::create },
-    { "webots",             Webots::create },
-    { "JSON",               JSON::create },
-    { "blimp",              Blimp::create },
-    { "novehicle",          NoVehicle::create },
+    {"quadplane", QuadPlane::create},
+    {"xplane", XPlane::create},
+    {"firefly", QuadPlane::create},
+    {"+", MultiCopter::create},
+    {"quad", MultiCopter::create},
+    {"copter", MultiCopter::create},
+    {"x", MultiCopter::create},
+    {"bfxrev", MultiCopter::create},
+    {"bfx", MultiCopter::create},
+    {"djix", MultiCopter::create},
+    {"cwx", MultiCopter::create},
+    {"hexa", MultiCopter::create},
+    {"hexa-cwx", MultiCopter::create},
+    {"hexa-dji", MultiCopter::create},
+    {"octa", MultiCopter::create},
+    {"octa-cwx", MultiCopter::create},
+    {"octa-dji", MultiCopter::create},
+    {"octa-quad-cwx", MultiCopter::create},
+    {"dodeca-hexa", MultiCopter::create},
+    {"tri", MultiCopter::create},
+    {"y6", MultiCopter::create},
+    {"deca", MultiCopter::create},
+    {"deca-cwx", MultiCopter::create},
+    {"heli", Helicopter::create},
+    {"heli-dual", Helicopter::create},
+    {"heli-compound", Helicopter::create},
+    {"heli-blade360", Helicopter::create},
+    {"singlecopter", SingleCopter::create},
+    {"coaxcopter", SingleCopter::create},
+    {"rover", SimRover::create},
+    {"balancebot", BalanceBot::create},
+    {"sailboat", Sailboat::create},
+    {"motorboat", MotorBoat::create},
+    {"crrcsim", CRRCSim::create},
+    {"jsbsim", JSBSim::create},
+    {"flightaxis", FlightAxis::create},
+    {"gazebo", Gazebo::create},
+    {"last_letter", last_letter::create},
+    {"tracker", Tracker::create},
+    {"balloon", Balloon::create},
+    {"plane", Plane::create},
+    {"calibration", Calibration::create},
+    {"vectored", Submarine::create},
+    {"vectored_6dof", Submarine::create},
+    {"silentwings", SilentWings::create},
+    {"morse", Morse::create},
+    {"airsim", AirSim::create},
+    {"scrimmage", Scrimmage::create},
+    {"webots-python", WebotsPython::create},
+    {"webots", Webots::create},
+    {"JSON", JSON::create},
+    {"blimp", Blimp::create},
+    {"novehicle", NoVehicle::create},
 };
 
 void SITL_State::_set_signal_handlers(void) const
@@ -201,10 +201,9 @@ void SITL_State::_set_signal_handlers(void) const
     sigemptyset(&sa_segv.sa_mask);
     sa_segv.sa_handler = _sig_segv;
     sigaction(SIGSEGV, &sa_segv, nullptr);
-
 }
 
-void SITL_State::_parse_command_line(int argc, char * const argv[])
+void SITL_State::_parse_command_line(int argc, char *const argv[])
 {
     int opt;
     float speedup = 1.0f;
@@ -218,7 +217,7 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
     _use_fg_view = false;
     char *autotest_dir = nullptr;
     _fg_address = "127.0.0.1";
-    const char* config = "";
+    const char *config = "";
 
     const int BASE_PORT = 5760;
     const int RCIN_PORT = 5501;
@@ -230,11 +229,13 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
     const int SIM_IN_PORT = 9003;
     const int SIM_OUT_PORT = 9002;
     const int IRLOCK_PORT = 9005;
-    const char * simulator_address = "127.0.0.1";
+    const char *simulator_address = "127.0.0.1";
     uint16_t simulator_port_in = SIM_IN_PORT;
     uint16_t simulator_port_out = SIM_OUT_PORT;
     _irlock_port = IRLOCK_PORT;
-    struct AP_Param::defaults_table_struct temp_cmdline_param{};
+    struct AP_Param::defaults_table_struct temp_cmdline_param
+    {
+    };
 
     // Set default start time to the real system time.
     // This will be overwritten if argument provided.
@@ -243,12 +244,13 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
     time_t start_time_UTC = first_tv.tv_sec;
     const bool is_example = APM_BUILD_TYPE(APM_BUILD_Replay) || APM_BUILD_TYPE(APM_BUILD_UNKNOWN);
 
-    enum long_options {
+    enum long_options
+    {
         CMDLINE_GIMBAL = 1,
         CMDLINE_FGVIEW,
         CMDLINE_AUTOTESTDIR,
         CMDLINE_DEFAULTS,
-        CMDLINE_UARTA,  // must be in A-J order and numbered consecutively
+        CMDLINE_UARTA, // must be in A-J order and numbered consecutively
         CMDLINE_UARTB,
         CMDLINE_UARTC,
         CMDLINE_UARTD,
@@ -290,67 +292,68 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
     };
 
     const struct GetOptLong::option options[] = {
-        {"help",            false,  0, 'h'},
-        {"wipe",            false,  0, 'w'},
-        {"unhide-groups",   false,  0, 'u'},
-        {"speedup",         true,   0, 's'},
-        {"rate",            true,   0, 'r'},
-        {"console",         false,  0, 'C'},
-        {"instance",        true,   0, 'I'},
-        {"param",           true,   0, 'P'},
-        {"synthetic-clock", false,  0, 'S'},
-        {"home",            true,   0, 'O'},
-        {"model",           true,   0, 'M'},
-        {"config",          true,   0, 'c'},
-        {"fg",              true,   0, 'F'},
-        {"gimbal",          false,  0, CMDLINE_GIMBAL},
-        {"enable-fgview",   false,  0, CMDLINE_FGVIEW},
-        {"autotest-dir",    true,   0, CMDLINE_AUTOTESTDIR},
-        {"defaults",        true,   0, CMDLINE_DEFAULTS},
-        {"uartA",           true,   0, CMDLINE_UARTA},
-        {"uartB",           true,   0, CMDLINE_UARTB},
-        {"uartC",           true,   0, CMDLINE_UARTC},
-        {"uartD",           true,   0, CMDLINE_UARTD},
-        {"uartE",           true,   0, CMDLINE_UARTE},
-        {"uartF",           true,   0, CMDLINE_UARTF},
-        {"uartG",           true,   0, CMDLINE_UARTG},
-        {"uartH",           true,   0, CMDLINE_UARTH},
-        {"uartI",           true,   0, CMDLINE_UARTI},
-        {"uartJ",           true,   0, CMDLINE_UARTJ},
-        {"serial0",         true,   0, CMDLINE_SERIAL0},
-        {"serial1",         true,   0, CMDLINE_SERIAL1},
-        {"serial2",         true,   0, CMDLINE_SERIAL2},
-        {"serial3",         true,   0, CMDLINE_SERIAL3},
-        {"serial4",         true,   0, CMDLINE_SERIAL4},
-        {"serial5",         true,   0, CMDLINE_SERIAL5},
-        {"serial6",         true,   0, CMDLINE_SERIAL6},
-        {"serial7",         true,   0, CMDLINE_SERIAL7},
-        {"serial8",         true,   0, CMDLINE_SERIAL8},
-        {"serial9",         true,   0, CMDLINE_SERIAL9},
-        {"rtscts",          false,  0, CMDLINE_RTSCTS},
-        {"base-port",       true,   0, CMDLINE_BASE_PORT},
-        {"rc-in-port",      true,   0, CMDLINE_RCIN_PORT},
-        {"sim-address",     true,   0, CMDLINE_SIM_ADDRESS},
-        {"sim-port-in",     true,   0, CMDLINE_SIM_PORT_IN},
-        {"sim-port-out",    true,   0, CMDLINE_SIM_PORT_OUT},
-        {"irlock-port",     true,   0, CMDLINE_IRLOCK_PORT},
-        {"start-time",      true,   0, CMDLINE_START_TIME},
-        {"sysid",           true,   0, CMDLINE_SYSID},
-        {"slave",           true,   0, CMDLINE_SLAVE},
+        {"help", false, 0, 'h'},
+        {"wipe", false, 0, 'w'},
+        {"unhide-groups", false, 0, 'u'},
+        {"speedup", true, 0, 's'},
+        {"rate", true, 0, 'r'},
+        {"console", false, 0, 'C'},
+        {"instance", true, 0, 'I'},
+        {"param", true, 0, 'P'},
+        {"synthetic-clock", false, 0, 'S'},
+        {"home", true, 0, 'O'},
+        {"model", true, 0, 'M'},
+        {"config", true, 0, 'c'},
+        {"fg", true, 0, 'F'},
+        {"gimbal", false, 0, CMDLINE_GIMBAL},
+        {"enable-fgview", false, 0, CMDLINE_FGVIEW},
+        {"autotest-dir", true, 0, CMDLINE_AUTOTESTDIR},
+        {"defaults", true, 0, CMDLINE_DEFAULTS},
+        {"uartA", true, 0, CMDLINE_UARTA},
+        {"uartB", true, 0, CMDLINE_UARTB},
+        {"uartC", true, 0, CMDLINE_UARTC},
+        {"uartD", true, 0, CMDLINE_UARTD},
+        {"uartE", true, 0, CMDLINE_UARTE},
+        {"uartF", true, 0, CMDLINE_UARTF},
+        {"uartG", true, 0, CMDLINE_UARTG},
+        {"uartH", true, 0, CMDLINE_UARTH},
+        {"uartI", true, 0, CMDLINE_UARTI},
+        {"uartJ", true, 0, CMDLINE_UARTJ},
+        {"serial0", true, 0, CMDLINE_SERIAL0},
+        {"serial1", true, 0, CMDLINE_SERIAL1},
+        {"serial2", true, 0, CMDLINE_SERIAL2},
+        {"serial3", true, 0, CMDLINE_SERIAL3},
+        {"serial4", true, 0, CMDLINE_SERIAL4},
+        {"serial5", true, 0, CMDLINE_SERIAL5},
+        {"serial6", true, 0, CMDLINE_SERIAL6},
+        {"serial7", true, 0, CMDLINE_SERIAL7},
+        {"serial8", true, 0, CMDLINE_SERIAL8},
+        {"serial9", true, 0, CMDLINE_SERIAL9},
+        {"rtscts", false, 0, CMDLINE_RTSCTS},
+        {"base-port", true, 0, CMDLINE_BASE_PORT},
+        {"rc-in-port", true, 0, CMDLINE_RCIN_PORT},
+        {"sim-address", true, 0, CMDLINE_SIM_ADDRESS},
+        {"sim-port-in", true, 0, CMDLINE_SIM_PORT_IN},
+        {"sim-port-out", true, 0, CMDLINE_SIM_PORT_OUT},
+        {"irlock-port", true, 0, CMDLINE_IRLOCK_PORT},
+        {"start-time", true, 0, CMDLINE_START_TIME},
+        {"sysid", true, 0, CMDLINE_SYSID},
+        {"slave", true, 0, CMDLINE_SLAVE},
 #if STORAGE_USE_FLASH
-        {"set-storage-flash-enabled", true,   0, CMDLINE_SET_STORAGE_FLASH_ENABLED},
+        {"set-storage-flash-enabled", true, 0, CMDLINE_SET_STORAGE_FLASH_ENABLED},
 #endif
 #if STORAGE_USE_POSIX
-        {"set-storage-posix-enabled", true,   0, CMDLINE_SET_STORAGE_POSIX_ENABLED},
+        {"set-storage-posix-enabled", true, 0, CMDLINE_SET_STORAGE_POSIX_ENABLED},
 #endif
 #if STORAGE_USE_FRAM
-        {"set-storage-fram-enabled", true,   0, CMDLINE_SET_STORAGE_FRAM_ENABLED},
+        {"set-storage-fram-enabled", true, 0, CMDLINE_SET_STORAGE_FRAM_ENABLED},
 #endif
-        {"vehicle",           true,   0, 'v'},
+        {"vehicle", true, 0, 'v'},
         {0, false, 0, 0}
     };
 
-    if (is_example) {
+    if (is_example)
+    {
         model_str = "novehicle";
         HALSITL::UARTDriver::_console = true;
     }
@@ -361,9 +364,9 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
     bool storage_fram_enabled = false;
     bool erase_all_storage = false;
 
-    if (asprintf(&autotest_dir, AP_BUILD_ROOT "/Tools/autotest") <= 0) {
-        AP_HAL::panic("out of memory");
-    }
+    // if (asprintf(&autotest_dir, AP_BUILD_ROOT "/Tools/autotest") <= 0) {
+    //     AP_HAL::panic("out of memory");
+    // }
     _set_signal_handlers();
 
     setvbuf(stdout, (char *)0, _IONBF, 0);
@@ -373,8 +376,10 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
 
     GetOptLong gopt(argc, argv, "hwus:r:CI:P:SO:M:F:c:v:",
                     options);
-    while (!is_example && (opt = gopt.getoption()) != -1) {
-        switch (opt) {
+    while (!is_example && (opt = gopt.getoption()) != -1)
+    {
+        switch (opt)
+        {
         case 'w':
             erase_all_storage = true;
             break;
@@ -396,24 +401,31 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
         case 'C':
             HALSITL::UARTDriver::_console = true;
             break;
-        case 'I': {
+        case 'I':
+        {
             _instance = atoi(gopt.optarg);
-            if (_base_port == BASE_PORT) {
+            if (_base_port == BASE_PORT)
+            {
                 _base_port += _instance * 10;
             }
-            if (_rcin_port == RCIN_PORT) {
+            if (_rcin_port == RCIN_PORT)
+            {
                 _rcin_port += _instance * 10;
             }
-            if (_fg_view_port == FG_VIEW_PORT) {
+            if (_fg_view_port == FG_VIEW_PORT)
+            {
                 _fg_view_port += _instance * 10;
             }
-            if (simulator_port_in == SIM_IN_PORT) {
+            if (simulator_port_in == SIM_IN_PORT)
+            {
                 simulator_port_in += _instance * 10;
             }
-            if (simulator_port_out == SIM_OUT_PORT) {
+            if (simulator_port_out == SIM_OUT_PORT)
+            {
                 simulator_port_out += _instance * 10;
             }
-            if (_irlock_port == IRLOCK_PORT) {
+            if (_irlock_port == IRLOCK_PORT)
+            {
                 _irlock_port += _instance * 10;
             }
         }
@@ -460,15 +472,16 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
         case CMDLINE_UARTG:
         case CMDLINE_UARTH:
         case CMDLINE_UARTI:
-        case CMDLINE_UARTJ: {
+        case CMDLINE_UARTJ:
+        {
             int uart_idx = opt - CMDLINE_UARTA;
             // ordering captures the historical use of uartB as SERIAL3
-            static const uint8_t mapping[] = { 0, 3, 1, 2, 4, 5, 6, 7, 8, 9 };
+            static const uint8_t mapping[] = {0, 3, 1, 2, 4, 5, 6, 7, 8, 9};
             int serial_idx = mapping[uart_idx];
-            char uart_letter = (char)(uart_idx)+'A';
+            char uart_letter = (char)(uart_idx) + 'A';
             printf("WARNING: deprecated option --uart%c will be removed in a "
-                "future release. Use --serial%d instead.\n",
-                uart_letter, serial_idx);
+                   "future release. Use --serial%d instead.\n",
+                   uart_letter, serial_idx);
             _serial_path[serial_idx] = gopt.optarg;
             break;
         }
@@ -508,9 +521,11 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
         case CMDLINE_START_TIME:
             start_time_UTC = atoi(gopt.optarg);
             break;
-        case CMDLINE_SYSID: {
+        case CMDLINE_SYSID:
+        {
             const int32_t sysid = atoi(gopt.optarg);
-            if (sysid < 1 || sysid > 255) {
+            if (sysid < 1 || sysid > 255)
+            {
                 fprintf(stderr, "You must specify a SYSID greater than 0 and less than 256\n");
                 exit(1);
             }
@@ -537,10 +552,12 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
         case 'h':
             _usage();
             exit(0);
-        case CMDLINE_SLAVE: {
+        case CMDLINE_SLAVE:
+        {
 #if HAL_SIM_JSON_MASTER_ENABLED
             const int32_t slaves = atoi(gopt.optarg);
-            if (slaves > 0) {
+            if (slaves > 0)
+            {
                 ride_along.init(slaves);
             }
 #endif
@@ -552,9 +569,11 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
         }
     }
 
-    if (!model_str) {
+    if (!model_str)
+    {
         printf("You must specify a vehicle model.  Options are:\n");
-        for (uint8_t i=0; i < ARRAY_SIZE(model_constructors); i++) {
+        for (uint8_t i = 0; i < ARRAY_SIZE(model_constructors); i++)
+        {
             printf("  %s\n", model_constructors[i].name);
         }
         // spit this out again as the original message probably just
@@ -563,19 +582,26 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
         exit(1);
     }
 
-    for (uint8_t i=0; i < ARRAY_SIZE(model_constructors); i++) {
-        if (strncasecmp(model_constructors[i].name, model_str, strlen(model_constructors[i].name)) == 0) {
+    for (uint8_t i = 0; i < ARRAY_SIZE(model_constructors); i++)
+    {
+        if (strncasecmp(model_constructors[i].name, model_str, strlen(model_constructors[i].name)) == 0)
+        {
             // printf("Creating model %f,%f,%f,%f at speed %.1f\n", opos.lat, opos.lng, opos.alt, opos.hdg, speedup);
             sitl_model = model_constructors[i].constructor(model_str);
-            if (home_str != nullptr) {
+            if (home_str != nullptr)
+            {
                 Location home;
                 float home_yaw;
-                if (strchr(home_str,',') == nullptr) {
-                    if (!lookup_location(home_str, home, home_yaw)) {
+                if (strchr(home_str, ',') == nullptr)
+                {
+                    if (!lookup_location(home_str, home, home_yaw))
+                    {
                         ::printf("Failed to find location (%s).  Should be in locations.txt or LAT,LON,ALT,HDG e.g. 37.4003371,-122.0800351,0,353\n", home_str);
                         exit(1);
                     }
-                } else if (!parse_home(home_str, home, home_yaw)) {
+                }
+                else if (!parse_home(home_str, home, home_yaw))
+                {
                     ::printf("Failed to parse home string (%s).  Should be LAT,LON,ALT,HDG e.g. 37.4003371,-122.0800351,0,353\n", home_str);
                     exit(1);
                 }
@@ -590,18 +616,21 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
             break;
         }
     }
-    if (sitl_model == nullptr) {
+    if (sitl_model == nullptr)
+    {
         printf("Vehicle model (%s) not found\n", model_str);
         exit(1);
     }
 
-    if (storage_posix_enabled && storage_flash_enabled) {
+    if (storage_posix_enabled && storage_flash_enabled)
+    {
         // this will change in the future!
         printf("Only one of flash or posix storage may be selected");
         exit(1);
     }
 
-    if (AP::sitl()) {
+    if (AP::sitl())
+    {
         // Set SITL start time.
         AP::sitl()->start_time_UTC = start_time_UTC;
     }
@@ -610,7 +639,8 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
     hal.set_storage_flash_enabled(storage_flash_enabled);
     hal.set_storage_fram_enabled(storage_fram_enabled);
 
-    if (erase_all_storage) {
+    if (erase_all_storage)
+    {
         AP_Param::erase_all();
         unlink("flash.dat");
         hal.set_wipe_storage(wiping_storage);
@@ -618,15 +648,24 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
 
     fprintf(stdout, "Starting sketch '%s'\n", vehicle_str);
 
-    if (strcmp(vehicle_str, "ArduCopter") == 0) {
+    if (strcmp(vehicle_str, "ArduCopter") == 0)
+    {
         _vehicle = ArduCopter;
-    } else if (strcmp(vehicle_str, "Rover") == 0) {
+    }
+    else if (strcmp(vehicle_str, "Rover") == 0)
+    {
         _vehicle = Rover;
-    } else if (strcmp(vehicle_str, "ArduSub") == 0) {
+    }
+    else if (strcmp(vehicle_str, "ArduSub") == 0)
+    {
         _vehicle = ArduSub;
-    } else if (strcmp(vehicle_str, "Blimp") == 0) {
+    }
+    else if (strcmp(vehicle_str, "Blimp") == 0)
+    {
         _vehicle = Blimp;
-    } else {
+    }
+    else
+    {
         _vehicle = ArduPlane;
     }
 
@@ -640,31 +679,36 @@ bool SITL_State::parse_home(const char *home_str, Location &loc, float &yaw_degr
 {
     char *saveptr = nullptr;
     char *s = strdup(home_str);
-    if (!s) {
+    if (!s)
+    {
         free(s);
         ::printf("No home string supplied\n");
         return false;
     }
     char *lat_s = strtok_r(s, ",", &saveptr);
-    if (!lat_s) {
+    if (!lat_s)
+    {
         free(s);
         ::printf("Failed to parse latitude\n");
         return false;
     }
     char *lon_s = strtok_r(nullptr, ",", &saveptr);
-    if (!lon_s) {
+    if (!lon_s)
+    {
         free(s);
         ::printf("Failed to parse longitude\n");
         return false;
     }
     char *alt_s = strtok_r(nullptr, ",", &saveptr);
-    if (!alt_s) {
+    if (!alt_s)
+    {
         free(s);
         ::printf("Failed to parse altitude\n");
         return false;
     }
     char *yaw_s = strtok_r(nullptr, ",", &saveptr);
-    if (!yaw_s) {
+    if (!yaw_s)
+    {
         free(s);
         ::printf("Failed to parse yaw\n");
         return false;
@@ -675,12 +719,13 @@ bool SITL_State::parse_home(const char *home_str, Location &loc, float &yaw_degr
     loc.lng = static_cast<int32_t>(strtod(lon_s, nullptr) * 1.0e7);
     loc.alt = static_cast<int32_t>(strtod(alt_s, nullptr) * 1.0e2);
 
-    if (loc.lat == 0 && loc.lng == 0) {
+    if (loc.lat == 0 && loc.lng == 0)
+    {
         // default to CMAC instead of middle of the ocean. This makes
         // SITL in MissionPlanner a bit more useful
-        loc.lat = -35.363261*1e7;
-        loc.lng = 149.165230*1e7;
-        loc.alt = 584*100;
+        loc.lat = -35.363261 * 1e7;
+        loc.lng = 149.165230 * 1e7;
+        loc.alt = 584 * 100;
     }
 
     yaw_degrees = strtof(yaw_s, nullptr);
@@ -696,12 +741,14 @@ bool SITL_State::lookup_location(const char *home_str, Location &loc, float &yaw
 {
     const char *locations = "@ROMFS/locations.txt";
     FileData *fd = AP::FS().load_file(locations);
-    if (fd == nullptr) {
+    if (fd == nullptr)
+    {
         ::printf("Missing %s\n", locations);
         return false;
     }
     char *str = strndup((const char *)fd->data, fd->length);
-    if (!str) {
+    if (!str)
+    {
         delete fd;
         return false;
     }
@@ -709,9 +756,11 @@ bool SITL_State::lookup_location(const char *home_str, Location &loc, float &yaw
     char *saveptr = nullptr;
     for (char *s = strtok_r(str, "\r\n", &saveptr);
          s;
-         s=strtok_r(nullptr, "\r\n", &saveptr)) {
-        if (strncasecmp(s, home_str, len) == 0 && s[len]=='=') {
-            bool ok = parse_home(&s[len+1], loc, yaw_degrees);
+         s = strtok_r(nullptr, "\r\n", &saveptr))
+    {
+        if (strncasecmp(s, home_str, len) == 0 && s[len] == '=')
+        {
+            bool ok = parse_home(&s[len + 1], loc, yaw_degrees);
             free(str);
             delete fd;
             return ok;
@@ -722,5 +771,5 @@ bool SITL_State::lookup_location(const char *home_str, Location &loc, float &yaw
     ::printf("Failed to find location '%s'\n", home_str);
     return false;
 }
-    
+
 #endif
