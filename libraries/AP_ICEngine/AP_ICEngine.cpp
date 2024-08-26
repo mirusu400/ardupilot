@@ -145,12 +145,12 @@ const AP_Param::GroupInfo AP_ICEngine::var_info[] = {
     // @Param: OPTIONS
     // @DisplayName: ICE options
     // @Description: Options for ICE control. The Disable ignition in RC failsafe option will cause the ignition to be set off on any R/C failsafe. If Throttle while disarmed is set then throttle control will be allowed while disarmed for planes when in MANUAL mode. If disable while disarmed is set the engine will not start while the vehicle is disarmed unless overriden by the MAVLink DO_ENGINE_CONTROL command.
-    // @Bitmask: 0:Disable ignition in RC failsafe,1:Disable redline governor,2:Throttle while disarmed,3:Disable while disarmed
+    // @Bitmask: 0:Disable ignition in RC failsafe,1:Disable redline governor,2:Throttle while disarmed,3:Disable while disarmed,4:Crank direction Reverse
     AP_GROUPINFO("OPTIONS", 15, AP_ICEngine, options, 0),
 
     // @Param: STARTCHN_MIN
     // @DisplayName: Input channel for engine start minimum PWM
-    // @Description: This is a minimum PWM value for engine start channel for an engine stop to be commanded. Setting this value will avoid RC input glitches with low PWM values from causing an unwanted engine stop. A value of zero means any PWM below 1300 triggers an engine stop.
+    // @Description: This is a minimum PWM value for engine start channel for an engine stop to be commanded. Setting this value will avoid RC input glitches with low PWM values from causing an unwanted engine stop. A value of zero means any PWM above 800 and below 1300 triggers an engine stop. To stop the engine start channel must above the larger of this value and 800 and below 1300.
     // @User: Standard
     // @Range: 0 1300
     AP_GROUPINFO("STARTCHN_MIN", 16, AP_ICEngine, start_chan_min_pwm, 0),
@@ -275,6 +275,13 @@ void AP_ICEngine::update(void)
         should_run = false;
     }
 #endif
+
+    // Stop on emergency stop
+    if (SRV_Channels::get_emergency_stop()) {
+        // Throttle is already forced to 0 in this case, ignition should also be stopped.
+        // Starter should not run.
+        should_run = false;
+    }
 
     // switch on current state to work out new state
     switch (state) {
@@ -620,7 +627,7 @@ void AP_ICEngine::set_starter(bool on)
     SRV_Channels::set_output_pwm(SRV_Channel::k_starter, on? pwm_starter_on : pwm_starter_off);
 
 #if AP_ICENGINE_TCA9554_STARTER_ENABLED
-    tca9554_starter.set_starter(on);
+    tca9554_starter.set_starter(on, option_set(Options::CRANK_DIR_REVERSE));
 #endif
 
 #if AP_RELAY_ENABLED
